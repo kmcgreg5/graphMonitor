@@ -21,11 +21,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-6g9_emix81o3mms5mo@4)^g)ye)(ns-))f1)sdk67adqgji(o)'
-
+FIELD_ENCRYPTION_KEY = b'C-XIwUSOn6QFictTytuwCsbgjLykuUIUqAznxkrphxg='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'channels',
     'dashboard',
+    'encrypted_model_fields',
 ]
 
 MIDDLEWARE = [
@@ -75,7 +76,7 @@ ASGI_APPLICATION = 'graphmonitor.asgi.application'
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {'hosts': [('0.0.0.0', 6379)]},
+        'CONFIG': {'hosts': [('10.162.1.106', 6379)]},
     },
 }
 
