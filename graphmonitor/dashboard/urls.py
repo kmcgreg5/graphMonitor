@@ -15,8 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from dashboard import views
 
-urlpatterns = [] # path('add-series', views.add_series, name='add_series')
+urlpatterns = [
+    path('', views.dashboard, name='dashboard'),
+] # path('add-series', views.add_series, name='add_series')
 
                     # from homepage.consumers import UpdateConsumer
 ws_urlpatterns = [] # path('update-series', UpdateConsumer.as_asgi())
