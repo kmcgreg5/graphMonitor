@@ -1,0 +1,16 @@
+{% extends 'base/index.html' %}
+
+{% block body %}
+<div class="d-flex justify-content-center">
+    {% load bootstrap5 %}
+    {% bootstrap_messages %}
+    <form method="post">
+        {% csrf_token %}
+        
+        {% bootstrap_form form %}
+        {% buttons %}
+        <input type="submit" value="Submit Form"/>
+        {% endbuttons %}
+    </form>
+</div>
+{% endblock %}

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'channels',
     'dashboard',
     'encrypted_model_fields',
+    'bootstrap5',
 ]
 
 MIDDLEWARE = [

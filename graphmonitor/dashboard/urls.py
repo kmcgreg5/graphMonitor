@@ -19,6 +19,9 @@ from dashboard import views
 
 urlpatterns = [
     path('', views.dashboard, name='dashboard'),
+    path('switch/add/', views.SwitchCreateView.as_view(), name='add-switch'),
+    path('switch/<int:pk>/', views.SwitchCreateView.as_view(), name='update-switch'),
+    path('switch/<int:pk>/delete/', views.SwitchCreateView.as_view(), name='delete-switch'),
 ] # path('add-series', views.add_series, name='add_series')
 
                     # from homepage.consumers import UpdateConsumer
