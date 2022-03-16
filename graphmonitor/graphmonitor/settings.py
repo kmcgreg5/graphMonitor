@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-6g9_emix81o3mms5mo@4)^g)ye)(ns-))f1)sdk67adqgji(o)'
-FIELD_ENCRYPTION_KEY = b'C-XIwUSOn6QFictTytuwCsbgjLykuUIUqAznxkrphxg='
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'channels',
     'dashboard',
     'encrypted_model_fields',
-    'bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -133,3 +132,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Included Packages Settings
+
+# django-encrypted-model-fields
+FIELD_ENCRYPTION_KEY = b'C-XIwUSOn6QFictTytuwCsbgjLykuUIUqAznxkrphxg='

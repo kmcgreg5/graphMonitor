@@ -1,14 +1,20 @@
 from django.db import models
-from django.core.validators import RegexValidator, URLValidator
+from django.core.validators import RegexValidator
 from encrypted_model_fields.fields import EncryptedCharField
+
+from dashboard.validators import validate_domain_or_ipv4, validate_query
+
 
 
 # Create your models here.
 class Switches(models.Model):
     name = models.CharField(max_length=255, default="Unknown")
-    address = models.CharField(max_length=255, validators=[URLValidator])
+    address = models.CharField(max_length=255, validators=[validate_domain_or_ipv4])
     username = models.CharField(max_length=255)
     password = EncryptedCharField(max_length=255)
+
+    def __str__(self):
+        return f"{self.name} ({self.address})"
     
 
 class Commands(models.Model):
@@ -28,22 +34,22 @@ class Commands(models.Model):
 
     # Protocol choices for expandability though I don't think its needed
     PROTOCOL_CHOICES = [
-        ('ssh', "SSH"),
         ('telnet', 'Telnet'),
+        ('ssh', "SSH"),
     ]
 
     # Priority Options to limit number of fallbacks to 5, lower priority is preferred
-    PRIORITY_OPTIONS = [(i, i) for i in range(5)]
+    PRIORITY_OPTIONS = [(i, i) for i in range(1, 6)]
 
     switch = models.ForeignKey(Switches, on_delete=models.CASCADE)
-    protocol = models.CharField(max_length=10, choices=PROTOCOL_CHOICES)
-    port = models.IntegerField()
+    protocol = models.CharField(max_length=10, choices=PROTOCOL_CHOICES, default='telnet')
+    port = models.IntegerField(default=23)
 
     # Priority to allow fallback connections with differing protocols 
-    priority = models.IntegerField(choices=PRIORITY_OPTIONS)
-    query = models.CharField(max_length=255)
+    priority = models.IntegerField(choices=PRIORITY_OPTIONS, default=1)
+    query = models.CharField(max_length=255, validators=[validate_query])
+    query_regex = models.CharField(max_length=255, validators=[RegexValidator()])
     query_unit = models.CharField(max_length=255, choices=UNIT_CHOICES)
-    query_regex = models.CharField(max_length=255, validators=[RegexValidator])
 
     # blank=True on these as they are only needed when using telnet
     query_end = models.CharField(max_length=255, blank=True)
