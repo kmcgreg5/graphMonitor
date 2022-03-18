@@ -25,6 +25,7 @@ function hideOnScroll() {
 
     if(el_autohide) {
         var last_scroll_top = 0;
+        el_autohide.classList.add('sticky-top');
         window.addEventListener('scroll', function() {
             let scroll_top = window.scrollY;
             if(scroll_top < last_scroll_top) {

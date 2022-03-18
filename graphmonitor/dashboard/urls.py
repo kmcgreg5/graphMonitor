@@ -23,6 +23,8 @@ urlpatterns = [
     path('switch/<int:pk>/', views.SwitchUpdateView.as_view(), name='update-switch'),
     path('command/add/', views.CommandCreateView.as_view(), name='add-command'),
     path('command/<int:pk>/', views.CommandUpdateView.as_view(), name='update-command'),
+    path('device/add/', views.DeviceCreateView.as_view(), name='add-device'),
+    path('device/<int:pk>/', views.DeviceUpdateView.as_view(), name='update-device'),
 
     #path('switch/<int:pk>/delete/', views.SwitchDeleteView.as_view(), name='delete-switch'),
 ] # path('add-series', views.add_series, name='add_series')

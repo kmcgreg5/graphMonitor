@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'channels',
     'dashboard',
     'encrypted_model_fields',
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -137,3 +139,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # django-encrypted-model-fields
 FIELD_ENCRYPTION_KEY = b'C-XIwUSOn6QFictTytuwCsbgjLykuUIUqAznxkrphxg='
+
+# crispy_forms, crispy_bootstrap5
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"

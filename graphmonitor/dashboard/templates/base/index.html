@@ -13,7 +13,7 @@
     </head>
     <body>
         {% block nav %}
-        <nav class="autohide navbar navbar-expand-lg navbar-light bg-light sticky-top">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
               <a class="navbar-brand" href="{% url 'dashboard' %}">Kmcgreg.com</a>
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,7 +37,8 @@
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                       <li><a class="dropdown-item" href="{% url 'add-switch' %}">Add Switch</a></li>
                       <li><a class="dropdown-item" href="{% url 'add-command' %}">Add Command</a></li>
-                      <li><a class="dropdown-item" href="{% url 'update-command' 1 %}">Update Command</a></li>
+                      <li><a class="dropdown-item" href="{% url 'add-device' %}">Add Port</a></li>
+                      <li><a class="dropdown-item" href="{% url 'update-device' 1 %}">Update Port</a></li>
                       <li><hr class="dropdown-divider"></li>
                       <li><a class="dropdown-item" href="#">Something else here</a></li>
                     </ul>

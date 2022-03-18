@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.views.decorators.cache import never_cache
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from dashboard.models import Switches, Commands
-from dashboard.forms import SwitchForm, CommandForm
+from dashboard.models import Switches, Commands, Devices
+from dashboard.forms import SwitchForm, CommandForm, DeviceForm
+from dashboard.scheduler import Processes
 
 # Create your views here.
 @never_cache
@@ -21,7 +22,7 @@ class SwitchCreateView(CreateView):
 
 class SwitchUpdateView(UpdateView):
     template_name = "form/index.html"
-    extra_context = {'title': 'Add Switch'}
+    extra_context = {'title': 'Update Switch'}
     model = Switches
     form_class = SwitchForm
     success_url = "/"
@@ -37,17 +38,23 @@ class CommandCreateView(CreateView):
 
 class CommandUpdateView(UpdateView):
     template_name = "form/index.html"
-    extra_context = {'title': 'Add Command'}
+    extra_context = {'title': 'Update Command'}
     model = Commands
     form_class = CommandForm
     success_url = "/"
 
 
-
-'''
-class SwitchDeleteView(DeleteView):
+class DeviceCreateView(CreateView):
     template_name = "form/index.html"
-    model = Switches
-    fields = ['name', 'address', 'username', 'password']
+    extra_context = {'title': 'Add Port'}
+    model = Devices
+    form_class = DeviceForm
     success_url = "/"
-'''
+
+
+class DeviceUpdateView(UpdateView):
+    template_name = "form/index.html"
+    extra_context = {'title': 'Update Port'}
+    model = Devices
+    form_class = DeviceForm
+    success_url = "/"
