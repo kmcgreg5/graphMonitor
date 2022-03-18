@@ -1,10 +1,14 @@
-document.addEventListener("DOMContentLoaded", function() {assignActive(); hideOnScroll();});
+document.addEventListener("DOMContentLoaded", initialize);
+
+function initialize() {
+    assignActive();
+    hideOnScroll();
+}
 
 function assignActive() {
     let nav_elements = document.querySelectorAll('nav.navbar a.nav-link[href]:not([role])');
     let dropdown_elements = document.querySelectorAll('nav.navbar a.dropdown-item[href]');
-    console.log(nav_elements);
-    console.log(dropdown_elements);
+    
     for (let i=0; i<nav_elements.length; i++) {
         if (window.location.pathname.includes(nav_elements[i].getAttribute("href"))) {
             nav_elements[i].classList.add('active');

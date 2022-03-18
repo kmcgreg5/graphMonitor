@@ -9,7 +9,7 @@ from dashboard.scheduler import Processes
 @never_cache
 def dashboard(request):
     context = {}
-    return render(request, "base/index.html", context)
+    return render(request, "dashboard/index.html", context)
 
 
 class SwitchCreateView(CreateView):

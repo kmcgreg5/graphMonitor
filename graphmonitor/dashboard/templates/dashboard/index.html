@@ -1,0 +1,37 @@
+{% extends 'base/index.html' %}
+
+{% block additional_links %}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+{% load static %}
+<script src="{% static 'dashboard/script.js' %}"></script>
+{% endblock %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <input class="w-100 text-center rounded-pill" type="text" id="datetimes" />
+        </div>
+        <div class="col-sm-8">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="switchCurrentData">
+                <label class="form-check-label" for="switchCurrentData">Current Data</label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col border">
+            <canvas class="border" id="somechart" width="400" height="300"></canvas>
+        </div>
+        <div class="col border">
+            <canvas class="border" id="somechart2" width="400" height="300"></canvas>
+        </div>
+    </div>
+</div>
+{% endblock %}
