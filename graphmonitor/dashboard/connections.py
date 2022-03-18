@@ -2,9 +2,9 @@ from dashboard.models import Switches, Commands, Devices, DataPoints
 from telnetlib import Telnet
 import re
 
-class convertNetUnits():
+class ConvertNetUnits():
     @staticmethod
-    def convertToBytesAuto(data: int, unit: str) -> int:
+    def convertToBytes(data: float, unit: str, rate: bool, interval) -> int:
         unit_lower = unit.lower()
         if 'giga' in unit_lower or 'G' in unit:
             data = data * 1000000000
@@ -13,83 +13,62 @@ class convertNetUnits():
         elif 'kilo' in unit_lower or 'K' in unit:
             data = data * 1000
 
-        if 'bit' in unit_lower or 'b' in unit:
-            data = data / 8
+        if 'bit' in unit_lower or ('b' in unit and len(unit) < 5):
+            data = data / 8.0
         
+        if rate:
+            if 'ps' in unit_lower or 'per sec' in unit_lower:
+                data = data * interval.total_seconds()
+            elif 'pm' in unit_lower or 'per min' in unit_lower:
+                data = data * (interval.total_seconds() / 60.0)
+              
         return data
 
-    @staticmethod
-    def convertToBytesStatic(data: int, expected_unit: str) -> int:
-        if 'G' in expected_unit:
-            data = data * 1000000000
-        elif 'M' in expected_unit:
-            data = data * 1000000
-        elif 'K' in expected_unit:
-            data = data * 1000
 
-        if 'b' in expected_unit:
-            data = data / 8
-        
-        return data
-
-class TelnetConnection():
-    def __enter__(self, id: int):
-        self.connection = None
+class TelnetConnection:
+    def __init__(self, id: int):
         self.switch = Switches.objects.get(pk=id)
+        self.connection = None
         self.devices = Devices.objects.filter(switch=self.switch).order_by('port')
 
+    def __enter__(self):
         return self
     
-    def __exit__(self):
+    def __exit__(self, exc_type, exc_value, exc_tb):
         if self.connection is not None:
-            sendString('exit')
-            self.connection.read_all()
-            self.connection.close()
+            try:
+                self.sendString('exit')
+                self.connection.read_all()
+            finally:
+                self.connection.close()
 
 
     def sendString(self, input: str):
-        self.connection.write(command.encode('ascii') + b'\n')
+        self.connection.write(input.encode('ascii') + b'\n')
 
 
     def login(self, command):
         self.connection = Telnet(self.switch.address, command.port)
         self.connection.read_until(command.login_prompt.encode('ascii'))
-        sendString(switch.username)
+        self.sendString(self.switch.username)
         self.connection.read_until(command.password_prompt.encode('ascii'))
-        sendString(switch.password)
-        # Read for 1 sec to clear pipe
-        self.connection.read_until(b"`!@#", 1)
+        self.sendString(self.switch.password)
+        self.connection.read_until(command.bash_prompt.encode('ascii'))
 
     def queryData(self, command) -> list:
-        for device in self.devices:
-            sendString(command.query.replace('[PORT]', device.port))
-
-        sendString('exit')
-        data = self.connection.read_all()
-        self.connection.close()
-        self.connection = None
-
-        
-        matches = re.findall(command.query_regex, data)
-        if len(matches) != self.devices.count():
-            print("[ERROR] The number of matches does not match the number of devices.")
-            return None
-
         new_data = []
-        for match, device in zip(matches, self.devices):
-            # Two capture groups
-            if type(match) == tuple:
-                bytes = int(match[0].replace(',', ''))
-                unit = match[1]
-                bytes = ConvertNetUnits.convertToBytesAuto(bytes, unit)
-            # One capture group
-            else:
-                bytes = int(match.replace(',', ''))
-                bytes = ConvertNetUnits.convertToBytesStatic(bytes, command.query_unit)
+        for device in self.devices:
+            self.sendString(command.query.replace('[PORT]', device.port))
+            response = self.connection.read_until(command.bash_prompt.encode('ascii')).decode('ascii')
+            match = re.search(command.query_regex, response)
+            if match is not None:
+                input_bytes = ConvertNetUnits.convertToBytes(float(match.group('input_data')), match.group('input_unit'), command.rate, command.query_interval)
+                output_bytes = ConvertNetUnits.convertToBytes(float(match.group('output_data')), match.group('output_unit'), command.rate, command.query_interval)
 
-            new_data.append(DataPoints(device=device, interval=command.query_interval, bytes=bytes))
+                new_data.append(DataPoints(device=device, interval=command.query_interval, input=True, bytes=input_bytes))
+                new_data.append(DataPoints(device=device, interval=command.query_interval, input=False, bytes=output_bytes))
         
-        return new_data
+        return new_data if len(new_data) != 0 else None
 
 
 class SSHConnection():
@@ -104,13 +83,12 @@ class SwitchConnection():
             if command.protocol == 'telnet':
                 with TelnetConnection(id) as switch:
                     switch.login(command)
-                    new_data = switch.querydata(command)
+                    new_data = switch.queryData(command)
                     if new_data is not None: break
 
             elif command.protocol == 'ssh':
                 pass
-        
+
         if new_data is not None:
-            print(new_data)
-            #for data in new_data:
-            #    data.save()
+            for data in new_data:
+                data.save()

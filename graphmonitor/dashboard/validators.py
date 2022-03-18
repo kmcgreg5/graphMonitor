@@ -16,7 +16,7 @@ def validate_query(value):
         raise ValidationError('Enter a query command that includes the placeholder "[PORT]" in it.')
 
 
-def validate_regex(value):
+def validate_regex_capture_groups(value):
     ommitted_charectors = ['^', '$']
 
     signs = []
@@ -35,9 +35,20 @@ def validate_regex(value):
                 del signs[-1]
             else:
                 raise ValidationError("Capture groups must match in your regex.")
-                
+
         elif char in ommitted_charectors:
             raise ValidationError(f"Your regex may not contain these charectors: {ommitted_charectors.join(', ')}")
 
     if len(signs) != 0:
         raise ValidationError("Capture groups must match in your regex.")
+
+
+def validate_regex_capture_detail(value):
+    if value.count("(") - value.count("\(") != 4:
+        raise ValidationError('Exactly four capture groups must be defined in your regex when selecting "Auto" as the unit.')
+
+    if "?P<input_data>" not in value or "?P<output_data>" not in value:
+        raise ValidationError("Your query regex must include '?P<input_data>' and '?P<output_data>' in the start of your data capture groups.")
+
+    if "?P<input_unit>" not in value or "?P<output_unit>" not in value:
+        raise ValidationError("Your query regex must include '?P<input_unit>' and '?P<output_unit>' in the start of your unit capture groups.")
