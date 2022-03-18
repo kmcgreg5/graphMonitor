@@ -5,7 +5,6 @@ from encrypted_model_fields.fields import EncryptedCharField
 from dashboard.validators import validate_domain_or_ipv4, validate_query, validate_regex
 
 
-
 # Create your models here.
 class Switches(models.Model):
     name = models.CharField(max_length=255, default="Unknown")

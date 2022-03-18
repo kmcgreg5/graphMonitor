@@ -4,7 +4,7 @@ import re
 
 class convertNetUnits():
     @staticmethod
-    def convertToBytes(data: int, unit: str, expected_unit: str) -> int:
+    def convertToBytesAuto(data: int, unit: str) -> int:
         unit_lower = unit.lower()
         if 'giga' in unit_lower or 'G' in unit:
             data = data * 1000000000
@@ -19,7 +19,7 @@ class convertNetUnits():
         return data
 
     @staticmethod
-    def convertToBytes(data: int, expected_unit: str) -> int:
+    def convertToBytesStatic(data: int, expected_unit: str) -> int:
         if 'G' in expected_unit:
             data = data * 1000000000
         elif 'M' in expected_unit:
@@ -81,11 +81,11 @@ class TelnetConnection():
             if type(match) == tuple:
                 bytes = int(match[0].replace(',', ''))
                 unit = match[1]
-                bytes = ConvertNetUnits.convertToBytes(bytes, unit, command.query_unit)
+                bytes = ConvertNetUnits.convertToBytesAuto(bytes, unit)
             # One capture group
             else:
                 bytes = int(match.replace(',', ''))
-                bytes = ConvertNetUnits.convertToBytes(bytes, command.query_unit)
+                bytes = ConvertNetUnits.convertToBytesStatic(bytes, command.query_unit)
 
             new_data.append(DataPoints(device=device, interval=command.query_interval, bytes=bytes))
         
