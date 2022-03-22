@@ -13,7 +13,7 @@ class ConvertNetUnits():
         elif 'kilo' in unit_lower or 'K' in unit:
             data = data * 1000
 
-        if 'bit' in unit_lower or ('b' in unit and len(unit) < 5):
+        if 'bit' in unit_lower or ('b' in unit and 'byte' not in unit_lower):
             data = data / 8.0
         
         if rate:

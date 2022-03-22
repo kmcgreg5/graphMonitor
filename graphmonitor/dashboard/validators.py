@@ -45,7 +45,7 @@ def validate_regex_capture_groups(value):
 
 def validate_regex_capture_detail(value):
     if value.count("(") - value.count("\(") != 4:
-        raise ValidationError('Exactly four capture groups must be defined in your regex when selecting "Auto" as the unit.')
+        raise ValidationError('Exactly four capture groups must be defined in your regex.')
 
     if "?P<input_data>" not in value or "?P<output_data>" not in value:
         raise ValidationError("Your query regex must include '?P<input_data>' and '?P<output_data>' in the start of your data capture groups.")
