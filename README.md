@@ -20,7 +20,7 @@ This is a django webserver for querying and displaying network traffic data from
 - ***Query Regex:*** a regex that will match and place the input and output rates and units in named capture groups
     - To name a regex capture group, place "?P<capture_name>" at the start of your capture groups, where your capture names would be input_unit, input_rate, output_unit, and output_rate
 - ***Rate:*** a boolean that indicates whether the returned data should be interpreted as a rate
-- ***Query Interval:*** the interval of time the query covers
+- <ins>Query Interval:</ins> the interval of time the query covers
 - Bash Prompt: the bash prompt displayed by a telnet connection
 - Login Prompt: the login prompt displayed by a telnet connection
 - Password Prompt: the password prompt displayed by a telnet connection
