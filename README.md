@@ -4,6 +4,8 @@ Web interface for displaying switch data
 This is a django webserver for querying and displaying network traffic data from switches. Switch traffic is queried through telnet connections by sending the provided query to the switch and matching it with a provided regex to return input and output rates and units.
 
 #### Data Input:
+Underlined fields are required
+
 ##### Switches Fields:
 - <ins>Name:</ins> the name, used for display purposes
 - <ins>Interval:</ins> an HH:MM:SS time interval to poll the switch at
