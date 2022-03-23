@@ -39,18 +39,18 @@ Underlined fields are required
 
 #### File Contents:
 ##### graphmonitor/dashboard:
-###### static: contains static css and javascript files
-###### templates: contains html template files utlizing the django template language and its features
-###### templatetags: contains a template tag for accessing items dictionary items by key with the django template language
-###### apps.py: contains startup code for initializing the static object that holds the switch query process objects
-###### connections.py: python code for querying switches over different protocols, currently only telnet
-###### forms.py: django objects that aid in displaying and processing user input information
-###### models.py: django objects representing tables in a database
-###### scheduler.py: contains a class for scheduling switch queries and a static class for holding and syncing access to said objects
-###### urls.py: contains the registered paths for the application
-###### validators.py: contains database field validators
-###### views.py: code to provide response to http requests
+- [static](graphmonitor/dashboard/static): contains static css and javascript files
+- [templates](graphmonitor/dashboard/templates): contains html template files utlizing the django template language and its features
+- [templatetags](graphmonitor/dashboard/templatetags): contains a template tag for accessing items dictionary items by key with the django template language
+- [apps.py](graphmonitor/dashboard/apps.py): contains startup code for initializing the static object that holds the switch query process objects
+- connections.py: python code for querying switches over different protocols, currently only telnet
+- forms.py: django objects that aid in displaying and processing user input information
+- models.py: django objects representing tables in a database
+- scheduler.py: contains a class for scheduling switch queries and a static class for holding and syncing access to said objects
+- urls.py: contains the registered paths for the application
+- validators.py: contains database field validators
+- views.py: code to provide response to http requests
 
 ##### graphmonitor/graphmonitor:
-###### settings.py: contains server settings such as the database connection and password encryption key
-###### urls.py: contains the registered paths for the application
+- settings.py: contains server settings such as the database connection and password encryption key
+- urls.py: contains the registered paths for the application
