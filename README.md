@@ -2,6 +2,11 @@
 Web interface for displaying switch data
 ### Description:
 This is a django webserver for querying and displaying network traffic data from switches. Switch traffic is queried through telnet connections by sending the provided query to the switch and matching it with a provided regex to return input and output rates and units.
+This is done to provide flexibility in the software being run on the switch, but comes at the cost of a more involved setup process.
+
+Graph display is done through Chart.js while bootstrap provides a clean layout and interface.
+
+Scheduling is done through the python threading class and utilizes timers for low-overhead. This method was chosen over cron jobs and pythons Celery library as it is platform independant and doesn't require the additional setup of workers.
 
 #### Data Input:
 Underlined fields are required
@@ -33,4 +38,19 @@ Underlined fields are required
 - <ins>Port:</ins> the port, as identified by the switch and placed in the query when a command is sent
 
 #### File Contents:
+##### graphmonitor/dashboard:
+###### static: contains static css and javascript files
+###### templates: contains html template files utlizing the django template language and its features
+###### templatetags: contains a template tag for accessing items dictionary items by key with the django template language
+###### apps.py: contains startup code for initializing the static object that holds the switch query process objects
+###### connections.py: python code for querying switches over different protocols, currently only telnet
+###### forms.py: django objects that aid in displaying and processing user input information
+###### models.py: django objects representing tables in a database
+###### scheduler.py: contains a class for scheduling switch queries and a static class for holding and syncing access to said objects
+###### urls.py: contains the registered paths for the application
+###### validators.py: contains database field validators
+###### views.py: code to provide response to http requests
 
+##### graphmonitor/graphmonitor:
+###### settings.py: contains server settings such as the database connection and password encryption key
+###### urls.py: contains the registered paths for the application
