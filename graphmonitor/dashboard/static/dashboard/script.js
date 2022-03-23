@@ -22,10 +22,10 @@ $(document).ready(function() {
 });
 
 function togglePolling(pk) {
-    if ($("#switchPoll" + pk).attr("checked")) {
-        stopSwitch(pk);
-    } else {
+    if ($("#switchPoll" + pk).is(":checked") === true) {
         startSwitch(pk);
+    } else {
+        stopSwitch(pk);
     }
 }
 

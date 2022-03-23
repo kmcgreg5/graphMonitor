@@ -133,7 +133,7 @@ class CommandUpdateView(UpdateView):
 
 class DeviceCreateView(CreateView):
     template_name = "form/index.html"
-    extra_context = {'title': 'Add Port'}
+    extra_context = {'title': 'Add Device'}
     model = Devices
     form_class = DeviceForm
     success_url = "/"
@@ -141,7 +141,7 @@ class DeviceCreateView(CreateView):
 
 class DeviceUpdateView(UpdateView):
     template_name = "form/index.html"
-    extra_context = {'title': 'Update Port'}
+    extra_context = {'title': 'Update Device'}
     model = Devices
     form_class = DeviceForm
     success_url = "/"
