@@ -1,11 +1,11 @@
 # graphMonitor
-### Name:
+#### Name:
 Kai McGregor
-### Location:
+#### Location:
 Raleigh NC, USA
 
 #### Video Demo: someurlhere
-#### Description:
+### Description:
 This is a django webserver for querying and displaying network traffic data from switches. Switch traffic is queried through telnet connections by sending the provided query to the switch and matching it with a provided regex to return input and output rates and units.
 This is done to provide flexibility in the software being run on the switch, but comes at the cost of a more involved setup process.
 
