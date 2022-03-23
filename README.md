@@ -1,6 +1,10 @@
 # graphMonitor
-Web interface for displaying switch data
-### Description:
+### Name:
+Kai McGregor
+### Location:
+Raleigh NC, USA
+#### Video Demo: someurlhere
+#### Description:
 This is a django webserver for querying and displaying network traffic data from switches. Switch traffic is queried through telnet connections by sending the provided query to the switch and matching it with a provided regex to return input and output rates and units.
 This is done to provide flexibility in the software being run on the switch, but comes at the cost of a more involved setup process.
 
@@ -9,7 +13,7 @@ Graph display is done through Chart.js while bootstrap provides a clean layout a
 Scheduling is done through the python threading class and utilizes timers for low-overhead. This method was chosen over cron jobs and pythons Celery library as it is platform independant and doesn't require the additional setup of workers.
 
 #### Data Input:
-Underlined fields are required
+**Underlined fields are required**
 
 ##### Switches Fields:
 - <ins>Name:</ins> the name, used for display purposes
