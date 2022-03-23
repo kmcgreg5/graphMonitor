@@ -25,7 +25,13 @@ urlpatterns = [
     path('command/<int:pk>/', views.CommandUpdateView.as_view(), name='update-command'),
     path('device/add/', views.DeviceCreateView.as_view(), name='add-device'),
     path('device/<int:pk>/', views.DeviceUpdateView.as_view(), name='update-device'),
-    path('graphs/all', views.all_graphs, name='all-graphs'),
+    path('graphs/all/', views.all_graphs, name='all-graphs'),
+    path('switch/<int:pk>/commands/', views.get_switch_commands, name='get-switch-commands'),
+    path('switch/<int:pk>/delete/', views.delete_switch, name='delete-switch'),
+    path('device/<int:pk>/delete/', views.delete_device, name='delete-device'),
+    path('switch/<int:pk>/start/', views.start_switch, name='start-switch'),
+    path('switch/<int:pk>/stop/', views.stop_switch, name='stop-switch'),
+    path('device/<int:pk>/data/delete/', views.delete_device_data, name='delete-device-data')
 
     #path('switch/<int:pk>/delete/', views.SwitchDeleteView.as_view(), name='delete-switch'),
 ] # path('add-series', views.add_series, name='add_series')

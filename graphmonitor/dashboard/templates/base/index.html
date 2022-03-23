@@ -27,14 +27,10 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <ul class="navbar-nav mb-2 mb-lg-0">
           <li class="nav-item">
             <a class="nav-link" aria-current="page" href="{% url 'dashboard' %}">Dashboard</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Devices</a>
-          </li>
-
         </ul>
         <ul class="navbar-nav mb-2 mb-lg-0">
           <li class="nav-item dropdown">
@@ -46,15 +42,7 @@
               <li><a class="dropdown-item" href="{% url 'add-switch' %}">Add Switch</a></li>
               <li><a class="dropdown-item" href="{% url 'add-command' %}">Add Command</a></li>
               <li><a class="dropdown-item" href="{% url 'add-device' %}">Add Port</a></li>
-              <li><a class="dropdown-item" href="{% url 'update-device' 1 %}">Update Port</a></li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
             </ul>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled">Disabled</a>
           </li>
         </ul>
       </div>

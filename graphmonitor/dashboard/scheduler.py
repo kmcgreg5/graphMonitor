@@ -36,6 +36,9 @@ class Periodic(object):
         self._timer.cancel()
         self._lock.release()
 
+    def isRunning(self):
+        return not self._stopped
+
 
 class Processes():
     '''
@@ -51,8 +54,11 @@ class Processes():
         try:
             if id not in Processes._processes:
                 Processes._processes[id] = Periodic(seconds, function, id)
+                return True
         finally:
             Processes._mutex.release()
+        
+        return False
 
 
     @staticmethod
@@ -62,8 +68,11 @@ class Processes():
             if id in Processes._processes:
                 Processes._processes[id].stop()
                 del Processes._processes[id]
+                return True
         finally:
             Processes._mutex.release()
+        
+        return False
 
 
     @staticmethod
@@ -72,8 +81,11 @@ class Processes():
         try:
             if id in Processes._processes:
                 Processes._processes[id].start()
+                return True
         finally:
             Processes._mutex.release()
+        
+        return False
 
 
     @staticmethod
@@ -82,8 +94,11 @@ class Processes():
         try:
             if id in Processes._processes:
                 Processes._processes[id].stop()
+                return True
         finally:
             Processes._mutex.release()
+        
+        return False
 
 
     @staticmethod
@@ -92,5 +107,19 @@ class Processes():
         try:
             if id in Processes._processes:
                 Processes._processes[id].interval = seconds
+                return True
         finally:
             Processes._mutex.release()
+        
+        return False
+
+    @staticmethod
+    def isProcessRunning(id: int) -> bool:
+        Processes._mutex.acquire()
+        try:
+            if id in Processes._processes:
+                return Processes._processes[id].isRunning()
+        finally:
+            Processes._mutex.release()
+        
+        return False

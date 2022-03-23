@@ -8,16 +8,16 @@ function initialize() {
 function assignActive() {
     let nav_elements = document.querySelectorAll('nav.navbar a.nav-link[href]:not([role])');
     let dropdown_elements = document.querySelectorAll('nav.navbar a.dropdown-item[href]');
-    
+  
     for (let i=0; i<nav_elements.length; i++) {
-        if (window.location.pathname.includes(nav_elements[i].getAttribute("href"))) {
+        if (window.location.pathname.includes(nav_elements[i].getAttribute("href")) && (nav_elements[i].getAttribute("href") != "/" || window.location.pathname == "/")) {
             nav_elements[i].classList.add('active');
             return;
         }
     }
 
     for (let i=0; i<dropdown_elements.length; i++) {
-        if (window.location.pathname.includes(dropdown_elements[i].getAttribute("href"))) {
+        if (window.location.pathname.includes(dropdown_elements[i].getAttribute("href")) && (dropdown_elements[i].getAttribute("href") != "/" || window.location.pathname == "/")) {
             dropdown_elements[i].classList.add('active');
             return;
         }

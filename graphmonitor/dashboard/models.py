@@ -1,12 +1,32 @@
 from django.db import models
 from django.core.validators import RegexValidator
 from encrypted_model_fields.fields import EncryptedCharField
+from django.dispatch.dispatcher import receiver
 
 from dashboard.validators import validate_domain_or_ipv4, validate_query, validate_regex_capture_groups, validate_regex_capture_detail
-
+from dashboard.scheduler import Processes
 
 # Create your models here.
 class Switches(models.Model):
+    # Fill update fields with the fields that have changed
+    def save(self, *args, **kwargs):
+        if self.pk:
+            # If self.pk is not None then it's an update.
+            cls = self.__class__
+            old = cls.objects.get(pk=self.pk)
+            # This will get the current model state since super().save() isn't called yet.
+            new = self  # This gets the newly instantiated Mode object with the new values.
+            changed_fields = []
+            for field in cls._meta.get_fields():
+                field_name = field.name
+                try:
+                    if getattr(old, field_name) != getattr(new, field_name):
+                        changed_fields.append(field_name)
+                except Exception as ex:  # Catch field does not exist exception
+                    pass
+            kwargs['update_fields'] = changed_fields
+        super().save(*args, **kwargs)
+
     name = models.CharField(max_length=255, default="Unknown")
     interval = models.DurationField(help_text="How often to poll the switch for data.")
     autostart = models.BooleanField(default=True)
@@ -91,3 +111,12 @@ class DataPoints(models.Model):
 
     def __str__(self):
         return f"{self.device.name}: {self.bytes / 1000.0} KB over {self.interval.total_seconds()} seconds"
+
+@receiver(models.signals.pre_delete, sender=Switches)
+def remove_switch_process(sender, instance, *args, **kwargs):
+    Processes.removeProcess(instance.pk)
+
+@receiver(models.signals.post_save, sender=Switches)
+def update_interval(sender, instance, *args, **kwargs):
+    if 'interval' in kwargs['update_fields']:
+        Processes.updateProcessInterval(instance.pk, instance.interval.total_seconds())

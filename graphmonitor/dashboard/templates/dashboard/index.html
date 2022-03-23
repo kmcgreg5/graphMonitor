@@ -10,11 +10,12 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <!-- Chart.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js" integrity="sha512-QSkVNOCYLtj73J4hbmVoOV6KVZuMluZlioC+trLpewV8qMjsWqlIQvkn1KGX2StWvPMdWGBqim1xlC8krl1EKQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<!-- Adaptor for datetime on x axis -->
+<!-- Adaptor for datetime on chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment"></script>
-
+<!-- JS for accessing cookies in javascript -->
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js" integrity="sha256-0H3Nuz3aug3afVbUlsu12Puxva3CP4EhJtPExqs54Vg=" crossorigin="anonymous"></script>
 
+<!-- Chart.js zoom plugin -->
 <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/1.2.0/chartjs-plugin-zoom.min.js" integrity="sha512-TT0wAMqqtjXVzpc48sI0G84rBP+oTkBZPgeRYIOVRGUdwJsyS3WPipsNh///ay2LJ+onCM23tipnz6EvEy2/UA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
@@ -26,7 +27,7 @@
 
 {% block body %}
 <div class="container">
-    <div class="row">
+    <div class="row my-3">
         <div class="col-sm-4">
             <input class="w-100 text-center rounded-pill" type="text" id="datetimes" />
         </div>
@@ -37,20 +38,117 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col border">
-            <div class="me-0 border" style="width:400px; height:300px;">
-                <canvas id="chart1"></canvas>
-            </div>
-            <div>
-                <button>SomeButton</button>
-                <button>AnotherButton</button>
-            </div>
-            
+    {% load dict_key %}
+    {% for switch, devices in switches.items %}
+    <hr>
+    <div class="row my-3">
+        <div class="col-md-auto">
+            <h3>{{switch.name}}:</h3>
         </div>
-        <div class="col border">
-            <div class="border" style="width:400px; height:300px;">
-                <canvas id="chart2"></canvas>
+        <div class="col-md-auto">
+            <a class="btn btn-outline-dark rounded-pill" href="{% url 'update-switch' switch.pk %}">Update Switch</a>
+        </div>
+        <div class="col-md-auto">
+            <button class="btn btn-outline-dark rounded-pill" data-bs-toggle="modal" data-bs-target="#selectionModal" data-bs-pk="{{switch.pk}}">Update Commands</button>
+        </div>
+        <div class="col-md-auto me-auto">
+            <button class="btn btn-outline-dark rounded-pill" data-bs-toggle="modal" data-bs-target="#confirmationModal" data-bs-type="Switch" data-bs-pk="{{switch.pk}}">Delete Switch</button>
+        </div>
+        <div class="col-md-auto">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="switchPoll{{switch.pk}}" {% if poll_status|dict_key:switch.pk %}checked{% endif %} onchange="togglePolling({{switch.pk}});">
+                <label class="form-check-label" for="switchPoll{{switch.pk}}">Poll Data</label>
+            </div>
+        </div>
+    </div>
+    <hr>
+        {% for device in devices %}
+            {% if forloop.counter0|divisibleby:2 %}
+            <div class="row my-3">
+            {% endif %}
+            <div class="col me-2">
+                <div class="row border">
+                    <div class="col-sm-8 border" style="height:300px;">
+                        <canvas id="chart{{device}}"></canvas>
+                    </div>
+                    <div class="col-sm-4 align-self-center">
+                        <div class="row my-4">
+                            <a class="btn btn-outline-dark rounded-pill" href="{% url 'update-device' device %}">Update Device</a>
+                        </div>
+                        <div class="row my-4">
+                            <button class="btn btn-outline-dark rounded-pill" data-bs-toggle="modal" data-bs-target="#confirmationModal" data-bs-type="DataPoints" data-bs-pk="{{device}}">Delete Data Points</button>
+                        </div>
+                        <div class="row my-4">
+                            <button class="btn btn-outline-dark rounded-pill" data-bs-toggle="modal" data-bs-target="#confirmationModal" data-bs-type="Device" data-bs-pk="{{device}}">Delete Device</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if forloop.counter0|divisibleby:2 %}
+                {% if forloop.last %}
+                <div class="col ms-2">
+                </div>
+                </div>
+                {% endif %}
+            {% else %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+</div>
+
+<!-- Modal with selection dialog -->
+<div class="modal fade" tabindex="-1" id="selectionModal" aria-labelledby="selectionModalLabel">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update Command</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Select the command you would like to update.</p>
+                <select id="selectModelBox"></select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a id="selectionModalLink" class="btn btn-primary" href="">Update Command</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for confirmation dialog -->
+<div class="modal fade" tabindex="-1" id="confirmationModal" aria-labelledby="confirmationModalLabel">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmationModalBody"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="confirmationModalButton">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for status messages -->
+<div class="modal fade" tabindex="-1" id="statusModal" aria-labelledby="statusModalLabel">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="statusModalBody"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Okay</button>
             </div>
         </div>
     </div>
