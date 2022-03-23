@@ -13,10 +13,10 @@ Graph display is done through Chart.js while bootstrap provides a clean layout a
 
 Scheduling is done through the python threading class and utilizes timers for low-overhead. This method was chosen over cron jobs and pythons Celery library as it is platform independant and doesn't require the additional setup of workers.
 
-#### Data Input:
+### Data Input:
 **Underlined fields are required**
 
-##### Switches Fields:
+#### Switches Fields:
 - <ins>Name:</ins> the name, used for display purposes
 - <ins>Interval:</ins> an HH:MM:SS time interval to poll the switch at
 - <ins>Autostart:</ins> a boolean that indicates whether to start polling at server startup
@@ -24,7 +24,7 @@ Scheduling is done through the python threading class and utilizes timers for lo
 - <ins>Username:</ins> the username to access the switch
 - <ins>Password:</ins> the password to access the switch, this is encrypted with a unique key at rest
 
-##### Commands Fields:
+#### Commands Fields:
 - <ins>Switch:</ins> the switch on which to run the command
 - <ins>Protocol:</ins> the protocol to use to connect, currently only telnet is supported
 - <ins>Port:</ins> the port on which to access the switch
@@ -37,13 +37,13 @@ Scheduling is done through the python threading class and utilizes timers for lo
 - Login Prompt: the login prompt displayed by a telnet connection
 - Password Prompt: the password prompt displayed by a telnet connection
 
-##### Device Fields:
+#### Device Fields:
 - <ins>Switch:</ins> the switch the device is connected to
 - <ins>Name:</ins> the name, used for display purposes
 - <ins>Port:</ins> the port, as identified by the switch and placed in the query when a command is sent
 
-#### File Contents:
-##### graphmonitor/dashboard:
+### File Contents:
+#### graphmonitor/dashboard:
 - [static:](graphmonitor/dashboard/static) contains static css and javascript files
 - [templates:](graphmonitor/dashboard/templates) contains html template files utlizing the django template language and its features
 - [templatetags:](graphmonitor/dashboard/templatetags) contains a template tag for accessing items dictionary items by key with the django template language
@@ -56,6 +56,6 @@ Scheduling is done through the python threading class and utilizes timers for lo
 - [validators.py:](graphmonitor/dashboard/validators.py) contains database field validators
 - [views.py:](graphmonitor/dashboard/views.py) code to provide response to http requests
 
-##### graphmonitor/graphmonitor:
+#### graphmonitor/graphmonitor:
 - [settings.py:](graphmonitor/graphmonitor/settings.py) contains server settings such as the database connection and password encryption key
 - [urls.py:](graphmonitor/graphmonitor/urls.py) contains the registered paths for the application
