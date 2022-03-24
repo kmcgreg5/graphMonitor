@@ -95,8 +95,8 @@ class Devices(models.Model):
     name = models.CharField(max_length=255, default='Unknown')
     port = models.CharField(max_length=20, help_text="The port as identified by the switch.") # Validate w/ query, ensure command is filled
 
-    def __str__():
-        return f"{name} ({port})"
+    def __str__(self):
+        return f"{self.name} ({self.port})"
 
     class Meta:
         unique_together = ['switch', 'port']
