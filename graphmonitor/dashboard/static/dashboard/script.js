@@ -7,6 +7,8 @@ $(document).ready(function() {
         }
     }, changeDateRange);
 
+    var csrftoken = Cookies.get('csrftoken');
+
     $('#switchCurrentData').change(connectWebSocket);
     $('#selectModelBox').change(updateSelectionModalLink);
 
@@ -19,7 +21,20 @@ $(document).ready(function() {
         let pk = button.getAttribute('data-bs-pk');
         $.get("/switch/" + pk + "/commands", updateSelectionModalOptions);
     });
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
 });
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
 
 function togglePolling(pk) {
     if ($("#switchPoll" + pk).is(":checked") === true) {
@@ -87,7 +102,7 @@ function deleteDataPoints(pk) {
     let start = $("#datetimes").data('daterangepicker').startDate;
     let end = $("#datetimes").data('daterangepicker').endDate;
     
-    $.post("/device/" + pk + "/data/delete/", {csrfmiddlewaretoken:Cookies.get('csrftoken'), start:start.format("YYYY-MM-DD HH:mm"), end:end.format("YYYY-MM-DD HH:mm")}, refreshPage)
+    $.post("/device/" + pk + "/data/delete/", {start:start.format("YYYY-MM-DD HH:mm"), end:end.format("YYYY-MM-DD HH:mm")}, refreshPage)
 }
 
 function refreshPage(data, status) {
@@ -119,7 +134,7 @@ function updateSelectionModalLink() {
 }
 
 function changeDateRange(start, end) {
-    $.post("/graphs/all/", {csrfmiddlewaretoken:Cookies.get('csrftoken'), start:start.format("YYYY-MM-DD HH:mm"), end:end.format("YYYY-MM-DD HH:mm")}, updateGraphs);
+    $.post("/graphs/all/", {start:start.format("YYYY-MM-DD HH:mm"), end:end.format("YYYY-MM-DD HH:mm")}, updateGraphs);
 }
 
 function updateGraphs(data, status) {

@@ -118,5 +118,5 @@ def remove_switch_process(sender, instance, *args, **kwargs):
 
 @receiver(models.signals.post_save, sender=Switches)
 def update_interval(sender, instance, *args, **kwargs):
-    if 'interval' in kwargs['update_fields']:
+    if kwargs['update_fields'] is not None and 'interval' in kwargs['update_fields']:
         Processes.updateProcessInterval(instance.pk, instance.interval.total_seconds())

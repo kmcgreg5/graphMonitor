@@ -29,7 +29,7 @@ class TelnetConnection:
     def __init__(self, id: int):
         self.switch = Switches.objects.get(pk=id)
         self.connection = None
-        self.devices = Devices.objects.filter(switch=self.switch).order_by('port')
+        self.devices = Devices.objects.filter(switch=self.switch)
 
     def __enter__(self):
         return self
@@ -57,7 +57,7 @@ class TelnetConnection:
 
     def queryData(self, command) -> list:
         new_data = []
-        for device in self.devices:
+        for device in self.devices.order_by('port'):
             self.sendString(command.query.replace('[PORT]', device.port))
             response = self.connection.read_until(command.bash_prompt.encode('ascii')).decode('ascii')
             match = re.search(command.query_regex, response)

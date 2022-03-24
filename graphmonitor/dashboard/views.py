@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from dashboard.models import Switches, Commands, Devices, DataPoints
 from dashboard.forms import SwitchForm, CommandForm, DeviceForm
@@ -8,6 +9,7 @@ from django.http import JsonResponse, HttpResponseNotFound, HttpResponse
 from datetime import datetime
 
 # Create your views here.
+@ensure_csrf_cookie
 @never_cache
 def dashboard(request):
     context = {}
